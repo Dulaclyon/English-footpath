@@ -1,24 +1,53 @@
 # Little by Little — English Footpath
-Original, framework-free responsive PWA for Grades 3–12. Ten representative grammar milestones, thirty original short readings, Chinese explanations, knowledge maps, retrieval practice, mastery checks, local progress backups and offline caching. This is a starter course, not a complete national curriculum or a proficiency test.
 
-## Run
-Serve `dist/` with any static HTTP server, for example `python3 -m http.server 4173 --directory dist`. Open localhost:4173. HTTPS is required for installation and service workers outside localhost. No API keys, build tools or dependencies required. System audio voices vary by device.
+Original responsive English-learning PWA for iPhone, Android, tablets and desktop. School progression runs from Grade 3 to senior high, with an introductory Academic IELTS 7.0+ preparation bridge. This is a working prototype and starter course, not a complete curriculum or an IELTS band predictor.
 
-## Learning rules
-Sequential unlock: all three reading comprehension checks + chosen 50/60 scored practice attempts + 8/10 mastery score. Missed questions are prioritised. Correct practice schedules a review after one day, mistakes after ten minutes. Small question bank repeats intentionally; production expansion should include substantially more varied retrieval, longer texts, delayed mastery verification and teacher review. Completion and accuracy are distinct. Previously mastered lessons stay mastered if target is raised.
+## Included
 
-## Devices
-Responsive for iPhone, Android, tablets and desktop. Install via Safari Share > Add to Home Screen or Chrome Install app. Lessons cache after first successful online visit. Progress is localStorage, not cloud synced; use JSON export/import. Do not treat this local client-side learning gate as a secure assessment system.
+- Ten school milestones and thirty original short readings, with three application questions per reading.
+- Grammar maps with Chinese explanations; forty categorised vocabulary items and twenty useful expressions with meaning contrasts, collocations and examples.
+- 50 scored retrieval attempts per school milestone, optionally 60. Balanced category minimums: 15 grammar, 15 vocabulary, 10 expression and 10 reading attempts. Complete all three reading checks and score 8/10 on a separate mastery check to advance.
+- Six Grade 7 microsteps informed by the supplied sample-question types. Each has its own 50/60-attempt and 8/10 advancement gate.
+- Four introductory IELTS skill steps: reading, listening, writing and speaking. Each has a practice gate; writing/speaking performance still needs teacher assessment. Audio is device-generated, not authentic test audio.
+- Teaching mode: 75–200% lesson zoom, focus layout, browser full screen where supported, pen, highlighter, eraser, Undo and movable text notes. Ink is a temporary screen overlay and clears when lesson/zoom/layout changes.
+- Offline lesson caching after the first successful online visit; local progress and JSON backup import/export.
+- Optional Python/SQLite student-account server: teachers create student IDs, reset passwords and view aggregate progress; students save/load their progress. **This server is not running on GitHub Pages.**
 
-## Hosting
-Deploy contents of dist to any HTTPS static host. A GitHub Pages Actions workflow is included. Configure repository Settings > Pages > Source: GitHub Actions. On GitHub Pages the URL will include the repository name; all asset paths are relative.
+## Run guest app
 
-## Research
-Consulted 2026-10-27:
-- https://www.moe.gov.cn/srcsite/A26/s8001/202204/t20220420_619921.html
-- https://www.ictr.edu.cn/download_center/ywjy/p/1.html
-- https://www.pep.com.cn/xw/zt/rjwy/gzkb2020/202205/P020220517522153664167.pdf
-The compulsory standard provides attainment bands, not a single mandatory grade-by-grade grammar sequence. This implementation's grade allocation is editorial. Content is original; no textbook passages were copied. The 50/60 target is a product preference, not a universal evidence-based mastery threshold.
+```
+python3 -m http.server 4173 --directory dist
+```
 
-## Store publication
-This PWA is not an App Store or Google Play listing. Native packaging (for example with Capacitor), physical-device QA, developer accounts, signing, accessibility/privacy review and store submission are separate release tasks. No child accounts, advertising, analytics or server collection are implemented. Google Fonts is an optional external font request; device fonts work offline.
+Open http://localhost:4173. There is no build step or frontend dependency. HTTPS is required for web-app installation outside localhost. Fonts are local system fallbacks; no Google Fonts request is required. Audio voices vary by device.
+
+## Run teacher/student accounts
+
+Read [server/README.md](server/README.md). Create a teacher interactively and serve the app with the included Python server. Remote use needs an HTTPS host, persistent storage and operational setup. Static hosting deliberately reports that accounts are not configured; it does not present local profiles as authenticated accounts.
+
+## Install on phones
+
+- iPhone/iPad: Safari → Share → Add to Home Screen.
+- Android: Chrome → menu → Install app or Add to Home screen, where offered.
+
+Browser installation was not verified on physical devices. Mainland China reachability is unverified; test from students' actual networks before classroom use. No domain or account host has been purchased. There is no App Store or Google Play release.
+
+## Verification
+
+```
+node tests/learning.test.cjs
+python3 tests/accounts_test.py
+python3 scripts/package.py
+```
+
+The account test runs a temporary local server and database; it does not register real students. See [qa/ralph-loop.md](qa/ralph-loop.md) for the three-cycle test record. The learning tests run in a lightweight DOM harness; browser checks separately verify user-facing layout and interactions.
+
+## Distribution
+
+The public repository was created from scratch at https://github.com/Dulaclyon/English-footpath. A GitHub Pages Actions workflow deploys `dist/`. Configure Settings → Pages → Source: GitHub Actions. The app's source-download button downloads `dist/english-footpath-source.zip`, including the optional account server and setup documentation, but no database, session data or credentials.
+
+## Content and research
+
+Read [CURRICULUM.md](CURRICULUM.md) and the [Grade 7 screenshot/question analysis](dist/grade7-analysis.html). The public repository contains no supplied examination photographs or student identifiers. Grade allocation is an editorial scaffold informed by national standards, not a claim of one mandatory sequence for all textbooks. Sample texts and app questions are original.
+
+The 50/60 count is a requested product rule, not a universal scientific mastery threshold. The current banks are small and intentionally repeat; lasting learning needs varied contexts and delayed recall. Client-side progress is not a secure examination record. Previously mastered lessons stay unlocked if the practice target is later raised.

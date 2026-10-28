@@ -36,3 +36,11 @@ This numerical rule does not guarantee familiarity or durable mastery. The initi
 ## Release limits
 
 No online learner accounts or cross-device sync. No recording of children's voices. Device-generated speech is optional. Browser/device installation should be validated on physical iPhone and Android hardware before a classroom rollout. Native store releases are not included.
+
+## Implemented prototype expansion
+
+Every school milestone now has a four-item thematic word network and two expressions, with meaning distinctions, collocations and original examples. Practice includes these items; mastery checks sample grammar, reading, vocabulary and expressions. A balanced practice gate requires 15 grammar, 15 vocabulary, 10 expression and 10 reading attempts within the 50/60 total. These are category-level minimums, not 50 attempts for every individual word.
+
+The separate Grade 7 workshop implements six smaller steps informed by the provided question types. Each step has its own 50/60 repetition minimum. The advanced destination is Academic IELTS 7.0+, with four introductory skill stages and teacher-reviewed open tasks. It is not a full IELTS preparation course or a band prediction.
+
+The published app includes guest/offline learning. An optional Python/SQLite account service is supplied for a future HTTPS host; static Pages cannot provide that backend. No real student records have been created or published.

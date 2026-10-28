@@ -1,0 +1,14 @@
+const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
+const elements=new Map();const el=()=>({innerHTML:'',textContent:'',style:{},classList:{add(){},toggle(){}},click(){},disabled:false});const events={};const sandbox={console,Date,Math,JSON,Number,String,Array,Set,localStorage:{getItem(){return null},setItem(k,v){this.saved=v}},document:{querySelector(s){if(!elements.has(s))elements.set(s,el());return elements.get(s)},querySelectorAll(){return []},addEventListener(k,f){events[k]=f}},window:{addEventListener(){},scrollTo(){}},navigator:{},setTimeout(){},clearTimeout(){}};vm.createContext(sandbox);vm.runInContext(fs.readFileSync('dist/content.js','utf8')+'\n'+fs.readFileSync('dist/app.js','utf8'),sandbox);const run=s=>vm.runInContext(s,sandbox);
+assert.equal(run('lessons.length'),10);assert.equal(run('lessons.reduce((n,l)=>n+l.readings.length,0)'),30);
+assert.equal(run('unlocked(1)'),false);run("selected=0;tab='test';renderTest()");assert.match(elements.get('#lessonbody').innerHTML,/strong foundation/);
+run("tab='practice';startPractice();submitAnswer(question.answer)");assert.equal(run('state.units[0].attempts'),1);run('submitAnswer(question.answer)');assert.equal(run('state.units[0].attempts'),1,'double submission must not count');
+run("startPractice();submitAnswer('wrong')");assert.equal(run('state.units[0].correct'),1);assert.equal(run('state.units[0].misses.length'),1);
+run('for(let i=2;i<50;i++){startPractice();submitAnswer(question.answer)}');assert.equal(run('state.units[0].attempts'),50);run("tab='test';renderTest()");assert.match(elements.get('#lessonbody').innerHTML,/strong foundation/,'readings still required');
+run('state.units[0].read=[0,1,2];renderTest()');assert.match(elements.get('#lessonbody').innerHTML,/Begin mastery/);
+run("beginTest();for(let i=0;i<10;i++)submitTestAnswer('wrong')");assert.equal(run('unlocked(1)'),false,'failed test must not unlock');
+run('beginTest();for(let i=0;i<10;i++)submitTestAnswer(question.answer)');assert.equal(run('unlocked(1)'),true);assert.equal(run('state.units[0].passed'),true);
+run('state.target=60;selected=1;state.units[1].attempts=50;state.units[1].read=[0,1,2];renderTest()');assert.match(elements.get('#lessonbody').innerHTML,/strong foundation/,'60 target respected');
+assert.equal(run('unlocked(1)'),true,'previous achievement stays unlocked');
+for(let i=0;i<10;i++){run(`selected=${i};readingIndex=0;readingCheck=0;tab='map';view='lesson';renderLesson()`);assert.match(elements.get('#lessonbody').innerHTML,/mapcenter/);run("tab='read';renderLesson()");assert.match(elements.get('#lessonbody').innerHTML,/1 \/ 3/);assert.equal(run('readingQuestions(lessons[selected]).length'),3)}
+console.log('PASS: content, all lesson views, repetition counts, duplicate-submit guard, wrong-answer review, reading prerequisite, failed/passed mastery, 50/60 targets, sequential unlock.');
